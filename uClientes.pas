@@ -12,7 +12,7 @@ uses
   FireDAC.Phys, FireDAC.Phys.SQLite, FireDAC.Phys.SQLiteDef,
   FireDAC.Stan.ExprFuncs, FireDAC.Phys.SQLiteWrapper.Stat, FireDAC.FMXUI.Wait,
   FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt, Data.DB,
-  FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, FMX.TabControl;
 
 type
   TCliente = record
@@ -32,10 +32,30 @@ type
     ListView1: TListView;
     FDConnection1: TFDConnection;
     FDQClientes: TFDQuery;
+    TabControl1: TTabControl;
+    tbConsultar: TTabItem;
+    tbInserir: TTabItem;
+    tbEditar: TTabItem;
+    Layout4: TLayout;
+    SpeedButton1: TSpeedButton;
+    Label2: TLabel;
+    Label3: TLabel;
+    edt_Codigo: TEdit;
+    Label4: TLabel;
+    edt_Nome: TEdit;
+    Label5: TLabel;
+    edt_Endereco: TEdit;
+    Layout5: TLayout;
+    btn_Salvar: TSpeedButton;
     procedure btnPesquisarClick(Sender: TObject);
 
     procedure atualizaClientesdoBanco();
     procedure insereClientenaLista(cliente : TCliente);
+    procedure btnInserirClienteClick(Sender: TObject);
+    procedure btn_SalvarClick(Sender: TObject);
+    procedure inserClienteNoBanco(cliente : TCliente);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
 
   private
     { Private declarations }
@@ -59,6 +79,13 @@ begin
   FDQClientes.Close;
   FDQClientes.SQL.Clear;
   FDQClientes.SQL.Add('select * from clientes ');
+
+  if edtPesquisa.Text <> '' then
+  begin
+    FDQClientes.SQL.Add('where nome like :pesquisa');
+    FDQClientes.ParamByName('pesquisa').AsString := edtPesquisa.Text;
+  end;
+
   FDQClientes.Open();
 
   FDQClientes.First;
@@ -77,6 +104,12 @@ begin
     FDQClientes.Next;
   end;
 
+end;
+
+procedure TfrmClientes.btnInserirClienteClick(Sender: TObject);
+begin
+
+  TabControl1.TabIndex := 1;
 
 end;
 
@@ -86,6 +119,40 @@ begin
  // Chamar metodo de consulta no banco de dados
 
  atualizaClientesdoBanco;
+
+end;
+
+procedure TfrmClientes.btn_SalvarClick(Sender: TObject);
+var vCliente : TCliente;
+begin
+
+  vCliente.codigo := StrToInt(edt_Codigo.Text);
+  vCliente.nome := edt_Nome.Text;
+  vCliente.endereco := edt_Endereco.Text;
+
+  //Chamar procedimento para inserir o cliente no banco
+  inserClienteNoBanco(vCliente);
+
+end;
+
+procedure TfrmClientes.FormShow(Sender: TObject);
+begin
+
+  TabControl1.TabIndex := 0;
+
+end;
+
+procedure TfrmClientes.inserClienteNoBanco(cliente: TCliente);
+begin
+
+  FDQClientes.Close;
+  FDQClientes.SQL.Clear;
+  FDQClientes.SQL.Add('INSERT INTO CLIENTES (CODIGO, NOME, ENDERECO)');
+  FDQClientes.SQL.Add(' VALUES (:CODIGO, :NOME, :ENDERECO)');
+  FDQClientes.ParamByName('codigo').AsInteger := cliente.codigo;
+  FDQClientes.ParamByName('nome').AsString := cliente.nome;
+  FDQClientes.ParamByName('endereco').AsString := cliente.endereco;
+  FDQClientes.ExecSQL;
 
 end;
 
@@ -101,6 +168,11 @@ begin
     TListItemText(Objects.FindDrawable('txtNome')).Text := cliente.nome;
   end;
 
+end;
+
+procedure TfrmClientes.SpeedButton1Click(Sender: TObject);
+begin
+  TabControl1.TabIndex := 0;
 end;
 
 end.
