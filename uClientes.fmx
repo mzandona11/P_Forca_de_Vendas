@@ -1,0 +1,133 @@
+object frmClientes: TfrmClientes
+  Left = 0
+  Top = 0
+  Caption = 'Clientes'
+  ClientHeight = 480
+  ClientWidth = 289
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object Layout1: TLayout
+    Align = Top
+    Size.Width = 289.000000000000000000
+    Size.Height = 41.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object btnVoltar: TSpeedButton
+      Align = Left
+      Size.Width = 41.000000000000000000
+      Size.Height = 41.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'priortoolbutton'
+    end
+    object btnInserirCliente: TSpeedButton
+      Align = Right
+      Position.X = 241.000000000000000000
+      Size.Width = 48.000000000000000000
+      Size.Height = 41.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'additembutton'
+    end
+    object Label1: TLabel
+      Align = Client
+      StyledSettings = [Family, FontColor]
+      Size.Width = 200.000000000000000000
+      Size.Height = 41.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Size = 18.000000000000000000
+      TextSettings.Font.StyleExt = {00060000000000000004000000}
+      TextSettings.HorzAlign = Center
+      Text = 'Clientes'
+      TabOrder = 2
+    end
+  end
+  object Layout2: TLayout
+    Align = Top
+    Position.Y = 41.000000000000000000
+    Size.Width = 289.000000000000000000
+    Size.Height = 40.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    object btnPesquisar: TSpeedButton
+      Align = Right
+      Position.X = 249.000000000000000000
+      Size.Width = 40.000000000000000000
+      Size.Height = 40.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'refreshtoolbutton'
+      OnClick = btnPesquisarClick
+    end
+    object edtPesquisa: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Align = Client
+      TabOrder = 1
+      Margins.Left = 5.000000000000000000
+      Margins.Top = 5.000000000000000000
+      Margins.Right = 5.000000000000000000
+      Margins.Bottom = 5.000000000000000000
+      Size.Width = 239.000000000000000000
+      Size.Height = 30.000000000000000000
+      Size.PlatformDefault = False
+    end
+  end
+  object Layout3: TLayout
+    Align = Client
+    Size.Width = 289.000000000000000000
+    Size.Height = 399.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 3
+    object ListView1: TListView
+      ItemAppearanceClassName = 'TDynamicAppearance'
+      ItemEditAppearanceClassName = 'TDynamicAppearance'
+      HeaderAppearanceClassName = 'TListHeaderObjects'
+      FooterAppearanceClassName = 'TListHeaderObjects'
+      Align = Client
+      Size.Width = 289.000000000000000000
+      Size.Height = 399.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      ItemAppearanceObjects.ItemObjects.ObjectsCollection = <
+        item
+          AppearanceObjectName = 'txtNome'
+          AppearanceClassName = 'TTextObjectAppearance'
+          Appearance.Width = 136.000000000000000000
+          Appearance.Height = 33.000000000000000000
+          Appearance.PlaceOffset.X = 70.000000000000000000
+          Appearance.PlaceOffset.Y = 8.000000000000000000
+        end
+        item
+          AppearanceObjectName = 'txtCodigo'
+          AppearanceClassName = 'TTextObjectAppearance'
+          Appearance.Width = 49.000000000000000000
+          Appearance.Height = 36.000000000000000000
+          Appearance.PlaceOffset.X = 6.000000000000000000
+          Appearance.PlaceOffset.Y = 8.000000000000000000
+        end>
+      ItemAppearanceObjects.ItemEditObjects.ObjectsCollection = <
+        item
+          AppearanceObjectName = 'Text1'
+          AppearanceClassName = 'TTextObjectAppearance'
+        end>
+    end
+  end
+  object FDConnection1: TFDConnection
+    Params.Strings = (
+      
+        'Database=C:\Users\Matheus\Documents\Embarcadero\Studio\Projects\' +
+        'Univel_Aplicativo\Banco\banco-univel'
+      'DriverID=SQLite')
+    Connected = True
+    LoginPrompt = False
+    Left = 120
+    Top = 145
+  end
+  object FDQClientes: TFDQuery
+    Connection = FDConnection1
+    SQL.Strings = (
+      'select *'
+      'from   clientes')
+    Left = 120
+    Top = 209
+  end
+end
