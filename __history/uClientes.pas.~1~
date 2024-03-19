@@ -52,7 +52,6 @@ implementation
 
 procedure TfrmClientes.atualizaClientesdoBanco;
 var vCliente : TCliente;
-   vTeste : string;
 begin
   //Efetuar a consulta no banco e trazer todos os clientes
 

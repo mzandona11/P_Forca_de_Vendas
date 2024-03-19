@@ -28,7 +28,6 @@ implementation
 uses uClientes;
 
 procedure Tfrm_Principal.btnClientesClick(Sender: TObject);
-VAR v_Teste : string;
 begin
 
   frmClientes.Show;
