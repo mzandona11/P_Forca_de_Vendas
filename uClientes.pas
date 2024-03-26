@@ -58,6 +58,7 @@ type
     Label9: TLabel;
     edt_endereco_edicao: TEdit;
     btn_salvar_edica: TButton;
+    btnDeletar: TButton;
     procedure btnPesquisarClick(Sender: TObject);
 
     procedure atualizaClientesdoBanco();
@@ -71,6 +72,14 @@ type
       const LocalClickPos: TPointF; const ItemObject: TListItemDrawable);
 
     procedure editaClienteNoBanco(cliente : TCliente);
+    procedure btn_salvar_edicaClick(Sender: TObject);
+
+    function buscarClientenoBanco(id_cliente : integer) : TCliente;
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure btnVoltarClick(Sender: TObject);
+
+    procedure deletaCliente(id_cliente : integer);
+    procedure btnDeletarClick(Sender: TObject);
 
   private
     { Private declarations }
@@ -121,6 +130,22 @@ begin
 
 end;
 
+procedure TfrmClientes.btnDeletarClick(Sender: TObject);
+var id_cliente : integer;
+begin
+
+  id_cliente := StrToInt(edt_Codigo_edicao.Text);
+
+  deletaCliente(id_cliente);
+
+  ShowMessage('Cliente deletado com sucesso.');
+
+  TabControl1.TabIndex := 0;
+
+  atualizaClientesdoBanco;
+
+end;
+
 procedure TfrmClientes.btnInserirClienteClick(Sender: TObject);
 begin
 
@@ -137,6 +162,13 @@ begin
 
 end;
 
+procedure TfrmClientes.btnVoltarClick(Sender: TObject);
+begin
+
+  frmClientes.Close;
+
+end;
+
 procedure TfrmClientes.btn_SalvarClick(Sender: TObject);
 var vCliente : TCliente;
 begin
@@ -147,6 +179,58 @@ begin
 
   //Chamar procedimento para inserir o cliente no banco
   inserClienteNoBanco(vCliente);
+
+end;
+
+procedure TfrmClientes.btn_salvar_edicaClick(Sender: TObject);
+var vCliente : TCliente;
+begin
+
+// Buscar os dados dos edits e salvar no banco
+  vCliente.codigo := StrToInt(edt_Codigo_edicao.Text);
+  vCliente.nome := edt_nome_edicao.Text;
+  vCliente.endereco := edt_endereco_edicao.Text;
+
+  editaClienteNoBanco(vCliente);
+
+  ShowMessage('Cliente alterado com sucesso.');
+
+  TabControl1.TabIndex := 0;
+  atualizaClientesdoBanco;
+
+end;
+
+function TfrmClientes.buscarClientenoBanco(id_cliente: integer): TCliente;
+var vCliente : TCliente;
+begin
+
+  FDQClientes.Close;
+  FDQClientes.SQL.Clear;
+  FDQClientes.SQL.Add('select * from clientes ');
+  FDQClientes.SQL.Add('where codigo = :codigo');
+  FDQClientes.ParamByName('codigo').AsInteger := id_cliente;
+
+  FDQClientes.Open();
+
+  vCliente.codigo := id_cliente;
+  vCliente.nome := FDQClientes.FieldByName('nome').AsString;
+  vCliente.endereco := FDQClientes.FieldByName('endereco').AsString;
+
+  Result := vCliente;
+
+end;
+
+procedure TfrmClientes.deletaCliente(id_cliente: integer);
+begin
+
+  FDQClientes.Close;
+  FDQClientes.SQL.Clear;
+  FDQClientes.SQL.Add('delete from clientes ');
+  FDQClientes.SQL.Add('where codigo = :codigo');
+
+  FDQClientes.ParamByName('codigo').AsInteger := id_cliente;
+
+  FDQClientes.ExecSQL;
 
 end;
 
@@ -199,6 +283,7 @@ begin
 
     TListItemText(Objects.FindDrawable('txtCodigo')).Text := IntToStr(cliente.codigo);
     TListItemText(Objects.FindDrawable('txtNome')).Text := cliente.nome;
+    TListItemText(Objects.FindDrawable('txtEndereco')).Text := cliente.endereco;
   end;
 
 end;
@@ -206,15 +291,21 @@ end;
 procedure TfrmClientes.ListView1ItemClickEx(const Sender: TObject;
   ItemIndex: Integer; const LocalClickPos: TPointF;
   const ItemObject: TListItemDrawable);
+var vCLiente : TCliente;
+    id_cliente : integer;
 begin
  //Chamar a tela de edição
 
 //pegar o indice do listview
-  ShowMessage(IntToStr(ItemIndex));
 
-  edt_Codigo_edicao.Text := TListItemText(ListView1.Items[ItemIndex].Objects.FindDrawable('txtCodigo')).Text;
 
-  edt_nome_edicao.Text := TListItemText(ListView1.Items[ItemIndex].Objects.FindDrawable('txtNome')).Text;
+  id_cliente := StrToInt(TListItemText(ListView1.Items[ItemIndex].Objects.FindDrawable('txtCodigo')).Text);
+
+  vCLiente := buscarClientenoBanco(id_cliente);
+
+  edt_Codigo_edicao.Text := IntToStr(vCLiente.codigo);
+  edt_nome_edicao.Text := vCLiente.nome;
+  edt_endereco_edicao.Text := vCLiente.endereco;
 
   TabControl1.TabIndex := 2;
 
@@ -224,6 +315,13 @@ end;
 procedure TfrmClientes.SpeedButton1Click(Sender: TObject);
 begin
   TabControl1.TabIndex := 0;
+end;
+
+procedure TfrmClientes.SpeedButton2Click(Sender: TObject);
+begin
+
+  TabControl1.TabIndex := 0;
+
 end;
 
 end.

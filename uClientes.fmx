@@ -14,7 +14,7 @@ object frmClientes: TfrmClientes
     Size.Width = 274.000000000000000000
     Size.Height = 480.000000000000000000
     Size.PlatformDefault = False
-    TabIndex = 2
+    TabIndex = 0
     TabOrder = 1
     TabPosition = None
     Sizes = (
@@ -28,7 +28,7 @@ object frmClientes: TfrmClientes
       CustomIcon = <
         item
         end>
-      IsSelected = False
+      IsSelected = True
       Size.Width = 8.000000000000000000
       Size.Height = 8.000000000000000000
       Size.PlatformDefault = False
@@ -49,6 +49,7 @@ object frmClientes: TfrmClientes
           Size.Height = 41.000000000000000000
           Size.PlatformDefault = False
           StyleLookup = 'priortoolbutton'
+          OnClick = btnVoltarClick
         end
         object btnInserirCliente: TSpeedButton
           Align = Right
@@ -133,6 +134,14 @@ object frmClientes: TfrmClientes
               Appearance.Height = 36.000000000000000000
               Appearance.PlaceOffset.X = 6.000000000000000000
               Appearance.PlaceOffset.Y = 8.000000000000000000
+            end
+            item
+              AppearanceObjectName = 'txtEndereco'
+              AppearanceClassName = 'TTextObjectAppearance'
+              Appearance.Width = 15.000000000000000000
+              Appearance.Height = 20.000000000000000000
+              Appearance.PlaceOffset.X = 224.000000000000000000
+              Appearance.PlaceOffset.Y = 16.000000000000000000
             end>
           ItemAppearanceObjects.ItemEditObjects.ObjectsCollection = <
             item
@@ -269,7 +278,7 @@ object frmClientes: TfrmClientes
       CustomIcon = <
         item
         end>
-      IsSelected = True
+      IsSelected = False
       Size.Width = 8.000000000000000000
       Size.Height = 8.000000000000000000
       Size.PlatformDefault = False
@@ -290,6 +299,7 @@ object frmClientes: TfrmClientes
           Size.Height = 41.000000000000000000
           Size.PlatformDefault = False
           StyleLookup = 'arrowlefttoolbutton'
+          OnClick = SpeedButton2Click
         end
         object Label6: TLabel
           Align = Client
@@ -326,6 +336,7 @@ object frmClientes: TfrmClientes
           Align = Top
           TabOrder = 5
           Position.Y = 33.000000000000000000
+          Enabled = False
           Size.Width = 274.000000000000000000
           Size.Height = 24.000000000000000000
           Size.PlatformDefault = False
@@ -385,6 +396,22 @@ object frmClientes: TfrmClientes
           Size.PlatformDefault = False
           TabOrder = 6
           Text = 'Salvar'
+          OnClick = btn_salvar_edicaClick
+        end
+        object btnDeletar: TButton
+          Align = Top
+          Margins.Left = 5.000000000000000000
+          Margins.Top = 5.000000000000000000
+          Margins.Right = 5.000000000000000000
+          Margins.Bottom = 5.000000000000000000
+          Position.X = 5.000000000000000000
+          Position.Y = 216.000000000000000000
+          Size.Width = 264.000000000000000000
+          Size.Height = 30.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 7
+          Text = 'Deletar'
+          OnClick = btnDeletarClick
         end
       end
     end
