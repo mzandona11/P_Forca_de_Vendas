@@ -47,6 +47,17 @@ type
     edt_Endereco: TEdit;
     Layout5: TLayout;
     btn_Salvar: TSpeedButton;
+    Layout6: TLayout;
+    SpeedButton2: TSpeedButton;
+    Label6: TLabel;
+    Layout7: TLayout;
+    Label7: TLabel;
+    edt_Codigo_edicao: TEdit;
+    Label8: TLabel;
+    edt_nome_edicao: TEdit;
+    Label9: TLabel;
+    edt_endereco_edicao: TEdit;
+    btn_salvar_edica: TButton;
     procedure btnPesquisarClick(Sender: TObject);
 
     procedure atualizaClientesdoBanco();
@@ -56,6 +67,10 @@ type
     procedure inserClienteNoBanco(cliente : TCliente);
     procedure SpeedButton1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure ListView1ItemClickEx(const Sender: TObject; ItemIndex: Integer;
+      const LocalClickPos: TPointF; const ItemObject: TListItemDrawable);
+
+    procedure editaClienteNoBanco(cliente : TCliente);
 
   private
     { Private declarations }
@@ -135,6 +150,24 @@ begin
 
 end;
 
+procedure TfrmClientes.editaClienteNoBanco(cliente: TCliente);
+begin
+
+  FDQClientes.Close;
+  FDQClientes.SQL.Clear;
+  FDQClientes.SQL.Add('update clientes set ');
+  FDQClientes.SQL.Add('   nome = :nome, ');
+  FDQClientes.SQL.Add('   endereco = :endereco ');
+  FDQClientes.SQL.Add('where codigo = :codigo');
+
+  FDQClientes.ParamByName('codigo').AsInteger := cliente.codigo;
+  FDQClientes.ParamByName('nome').AsString := cliente.nome;
+  FDQClientes.ParamByName('endereco').AsString := cliente.endereco;
+
+  FDQClientes.ExecSQL;
+
+end;
+
 procedure TfrmClientes.FormShow(Sender: TObject);
 begin
 
@@ -167,6 +200,24 @@ begin
     TListItemText(Objects.FindDrawable('txtCodigo')).Text := IntToStr(cliente.codigo);
     TListItemText(Objects.FindDrawable('txtNome')).Text := cliente.nome;
   end;
+
+end;
+
+procedure TfrmClientes.ListView1ItemClickEx(const Sender: TObject;
+  ItemIndex: Integer; const LocalClickPos: TPointF;
+  const ItemObject: TListItemDrawable);
+begin
+ //Chamar a tela de edição
+
+//pegar o indice do listview
+  ShowMessage(IntToStr(ItemIndex));
+
+  edt_Codigo_edicao.Text := TListItemText(ListView1.Items[ItemIndex].Objects.FindDrawable('txtCodigo')).Text;
+
+  edt_nome_edicao.Text := TListItemText(ListView1.Items[ItemIndex].Objects.FindDrawable('txtNome')).Text;
+
+  TabControl1.TabIndex := 2;
+
 
 end;
 
