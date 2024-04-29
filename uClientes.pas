@@ -12,7 +12,7 @@ uses
   FireDAC.Phys, FireDAC.Phys.SQLite, FireDAC.Phys.SQLiteDef,
   FireDAC.Stan.ExprFuncs, FireDAC.Phys.SQLiteWrapper.Stat, FireDAC.FMXUI.Wait,
   FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt, Data.DB,
-  FireDAC.Comp.DataSet, FireDAC.Comp.Client, FMX.TabControl;
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, FMX.TabControl, FMX.Objects;
 
 type
   TCliente = record
@@ -59,6 +59,8 @@ type
     edt_endereco_edicao: TEdit;
     btn_salvar_edica: TButton;
     btnDeletar: TButton;
+    Image1: TImage;
+    Image2: TImage;
     procedure btnPesquisarClick(Sender: TObject);
 
     procedure atualizaClientesdoBanco();
@@ -284,6 +286,14 @@ begin
     TListItemText(Objects.FindDrawable('txtCodigo')).Text := IntToStr(cliente.codigo);
     TListItemText(Objects.FindDrawable('txtNome')).Text := cliente.nome;
     TListItemText(Objects.FindDrawable('txtEndereco')).Text := cliente.endereco;
+
+    //Inserir imagem do cliente
+    TListItemImage(Objects.FindDrawable('imgCliente')).Bitmap := Image1.Bitmap;
+
+    //Inserir imagem de editar
+    TListItemImage(Objects.FindDrawable('imgEditar')).Bitmap := Image2.Bitmap;
+
+
   end;
 
 end;
@@ -299,15 +309,19 @@ begin
 //pegar o indice do listview
 
 
-  id_cliente := StrToInt(TListItemText(ListView1.Items[ItemIndex].Objects.FindDrawable('txtCodigo')).Text);
+  if (ItemObject.Name = 'imgEditar') then
+  begin
+    id_cliente := StrToInt(TListItemText(ListView1.Items[ItemIndex].Objects.FindDrawable('txtCodigo')).Text);
 
-  vCLiente := buscarClientenoBanco(id_cliente);
+    vCLiente := buscarClientenoBanco(id_cliente);
 
-  edt_Codigo_edicao.Text := IntToStr(vCLiente.codigo);
-  edt_nome_edicao.Text := vCLiente.nome;
-  edt_endereco_edicao.Text := vCLiente.endereco;
+    edt_Codigo_edicao.Text := IntToStr(vCLiente.codigo);
+    edt_nome_edicao.Text := vCLiente.nome;
+    edt_endereco_edicao.Text := vCLiente.endereco;
 
-  TabControl1.TabIndex := 2;
+    TabControl1.TabIndex := 2;
+  end;
+
 
 
 end;
