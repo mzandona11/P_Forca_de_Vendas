@@ -27,4 +27,11 @@ object frm_Principal: Tfrm_Principal
     TabOrder = 2
     Text = 'Produtos'
   end
+  object btnPedidos: TButton
+    Position.X = 40.000000000000000000
+    Position.Y = 304.000000000000000000
+    TabOrder = 4
+    Text = 'Pedidos'
+    OnClick = btnPedidosClick
+  end
 end

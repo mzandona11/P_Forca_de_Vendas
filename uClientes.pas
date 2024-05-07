@@ -18,6 +18,7 @@ type
   TCliente = record
     codigo : Integer;
     nome, endereco : string;
+    foto : TBitmap;
   end;
 
   TfrmClientes = class(TForm)
@@ -61,6 +62,8 @@ type
     btnDeletar: TButton;
     Image1: TImage;
     Image2: TImage;
+    ImageControl1: TImageControl;
+    imgCliente: TImage;
     procedure btnPesquisarClick(Sender: TObject);
 
     procedure atualizaClientesdoBanco();
@@ -98,7 +101,7 @@ implementation
 
 procedure TfrmClientes.atualizaClientesdoBanco;
 var vCliente : TCliente;
-   vTeste : string;
+   foto_stream : TStream;
 begin
   //Efetuar a consulta no banco e trazer todos os clientes
 
@@ -120,6 +123,18 @@ begin
 
   while not FDQClientes.Eof do
   begin
+
+    if FDQClientes.FieldByName('foto').AsString <> '' then
+    begin
+      foto_stream := FDQClientes.CreateBlobStream(FDQClientes.FieldByName('foto'), TBlobStreamMode.bmRead);
+
+      vCliente.foto := TBitmap.Create;
+      vCliente.foto.LoadFromStream(foto_stream);
+
+      foto_stream.DisposeOf;
+    end
+    else
+      vCliente.foto := nil;
 
     vCliente.codigo := FDQClientes.FieldByName('codigo').AsInteger;
     vCliente.nome := FDQClientes.FieldByName('nome').AsString;
@@ -192,6 +207,7 @@ begin
   vCliente.codigo := StrToInt(edt_Codigo_edicao.Text);
   vCliente.nome := edt_nome_edicao.Text;
   vCliente.endereco := edt_endereco_edicao.Text;
+  vCliente.foto := imgCliente.Bitmap;
 
   editaClienteNoBanco(vCliente);
 
@@ -243,12 +259,15 @@ begin
   FDQClientes.SQL.Clear;
   FDQClientes.SQL.Add('update clientes set ');
   FDQClientes.SQL.Add('   nome = :nome, ');
-  FDQClientes.SQL.Add('   endereco = :endereco ');
+  FDQClientes.SQL.Add('   endereco = :endereco, ');
+  FDQClientes.SQL.Add('   foto = :foto ');
   FDQClientes.SQL.Add('where codigo = :codigo');
 
   FDQClientes.ParamByName('codigo').AsInteger := cliente.codigo;
   FDQClientes.ParamByName('nome').AsString := cliente.nome;
   FDQClientes.ParamByName('endereco').AsString := cliente.endereco;
+  FDQClientes.ParamByName('foto').Assign(imgCliente.Bitmap);
+
 
   FDQClientes.ExecSQL;
 
@@ -266,11 +285,13 @@ begin
 
   FDQClientes.Close;
   FDQClientes.SQL.Clear;
-  FDQClientes.SQL.Add('INSERT INTO CLIENTES (CODIGO, NOME, ENDERECO)');
-  FDQClientes.SQL.Add(' VALUES (:CODIGO, :NOME, :ENDERECO)');
+  FDQClientes.SQL.Add('INSERT INTO CLIENTES (CODIGO, NOME, ENDERECO, FOTO)');
+  FDQClientes.SQL.Add(' VALUES (:CODIGO, :NOME, :ENDERECO, :FOTO)');
   FDQClientes.ParamByName('codigo').AsInteger := cliente.codigo;
   FDQClientes.ParamByName('nome').AsString := cliente.nome;
   FDQClientes.ParamByName('endereco').AsString := cliente.endereco;
+  FDQClientes.ParamByName('foto').Assign(imgCliente.Bitmap);
+
   FDQClientes.ExecSQL;
 
 end;
@@ -288,7 +309,11 @@ begin
     TListItemText(Objects.FindDrawable('txtEndereco')).Text := cliente.endereco;
 
     //Inserir imagem do cliente
-    TListItemImage(Objects.FindDrawable('imgCliente')).Bitmap := Image1.Bitmap;
+
+    if cliente.foto <> nil then
+      TListItemImage(Objects.FindDrawable('imgCliente')).Bitmap := cliente.foto
+    else
+      TListItemImage(Objects.FindDrawable('imgCliente')).Bitmap := Image1.Bitmap;
 
     //Inserir imagem de editar
     TListItemImage(Objects.FindDrawable('imgEditar')).Bitmap := Image2.Bitmap;

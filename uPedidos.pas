@@ -67,8 +67,13 @@ type
     btnDeletar: TButton;
     edt_data: TDateEdit;
     FDQuery1: TFDQuery;
+    Layout8: TLayout;
+    Label10: TLabel;
+    Label11: TLabel;
+    Image3: TImage;
     procedure btnPesquisarClick(Sender: TObject);
     procedure atualizaPedidosBanco();
+    procedure inserePedidoNaLista(pedido : TPedido);
   private
     { Private declarations }
   public
@@ -101,7 +106,13 @@ begin
   FDQuery1.SQL.Add('   ON CLIENTES.CODIGO = PEDIDO.ID_CLIENTE ');
   FDQuery1.SQL.Add('  INNER JOIN FORMAPGTO');
   FDQuery1.SQL.Add('   ON FORMAPGTO.ID = PEDIDO.ID_FORMAPGTO');
+  FDQuery1.SQL.Add('where  pedido.data = :data ');
+
+  FDQuery1.ParamByName('data').AsDate := edt_data.Date;
+
   FDQuery1.Open();
+
+  ListView1.Items.Clear;
 
   while not FDQuery1.Eof do
   begin
@@ -115,6 +126,7 @@ begin
     vPedido.valor_total := FDQuery1.FieldByName('valor_total').AsFloat;
 
     // metodo inserir o pedido na lista
+    inserePedidoNaLista(vPedido);
 
     FDQuery1.Next;
   end;
@@ -125,6 +137,25 @@ procedure TFrm_Pedidos.btnPesquisarClick(Sender: TObject);
 begin
 
  // Chamar metodo de listar pedidos
+ atualizaPedidosBanco;
+
+end;
+
+procedure TFrm_Pedidos.inserePedidoNaLista(pedido: TPedido);
+begin
+  //inserir nosso pedido na lista
+  with ListView1.Items.Add do
+  begin
+
+    TListItemText(Objects.FindDrawable('txtId')).Text := IntToStr(pedido.id);
+    TListItemText(Objects.FindDrawable('txtNome')).Text := pedido.nome_cliente;
+    TListItemText(Objects.FindDrawable('txtData')).Text := DateToStr(pedido.data_pedido);
+    TListItemText(Objects.FindDrawable('txtValor')).Text := FloatToStr(pedido.valor_total);
+
+    TListItemImage(Objects.FindDrawable('Image5')).Bitmap := Image3.Bitmap;
+
+  end;
+
 
 end;
 

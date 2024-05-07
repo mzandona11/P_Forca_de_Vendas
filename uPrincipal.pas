@@ -11,7 +11,9 @@ type
   Tfrm_Principal = class(TForm)
     btnClientes: TButton;
     btnProdutos: TButton;
+    btnPedidos: TButton;
     procedure btnClientesClick(Sender: TObject);
+    procedure btnPedidosClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -25,13 +27,20 @@ implementation
 
 {$R *.fmx}
 
-uses uClientes;
+uses uClientes, uPedidos;
 
 procedure Tfrm_Principal.btnClientesClick(Sender: TObject);
 VAR v_Teste : string;
 begin
 
   frmClientes.Show;
+
+end;
+
+procedure Tfrm_Principal.btnPedidosClick(Sender: TObject);
+begin
+
+  Frm_Pedidos.Show;
 
 end;
 
