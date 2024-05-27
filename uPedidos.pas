@@ -13,9 +13,21 @@ uses
   FMX.StdCtrls, FMX.ListView, FMX.Edit, FMX.Controls.Presentation, FMX.Layouts,
   FMX.TabControl, Data.DB, FireDAC.Comp.Client, FMX.Objects, FMX.DateTimeCtrls,
   FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt,
-  FireDAC.Comp.DataSet;
+  FireDAC.Comp.DataSet, FMX.Memo.Types, FMX.ListBox, FMX.ScrollBox, FMX.Memo, IOUtils, System.Generics.Collections,
+  System.Actions, FMX.ActnList;
 
 type
+  TCliente = record
+    codigo : Integer;
+    nome : string;
+  end;
+
+  TProduto = record
+    codigo  : Integer;
+    nome : string;
+    valorUnit,qtde : Float32;
+  end;
+
   TPedido = record
     id, id_cliente, id_formapgto : Integer;
     nome_cliente, forma_pgto : string;
@@ -30,7 +42,7 @@ type
     imgCliente: TImage;
     FDConnection1: TFDConnection;
     TabControl1: TTabControl;
-    tbConsultar: TTabItem;
+    tbConsultarPedidos: TTabItem;
     Layout1: TLayout;
     btnVoltar: TSpeedButton;
     btnInserirCliente: TSpeedButton;
@@ -40,44 +52,70 @@ type
     edtPesquisa: TEdit;
     Layout3: TLayout;
     ListView1: TListView;
-    tbInserir: TTabItem;
+    tbInserePedido: TTabItem;
     Layout4: TLayout;
     SpeedButton1: TSpeedButton;
     Label2: TLabel;
-    Label3: TLabel;
-    edt_Codigo: TEdit;
-    Label4: TLabel;
-    edt_Nome: TEdit;
-    Label5: TLabel;
-    edt_Endereco: TEdit;
     Layout5: TLayout;
-    btn_Salvar: TSpeedButton;
-    tbEditar: TTabItem;
-    Layout6: TLayout;
-    SpeedButton2: TSpeedButton;
-    Label6: TLabel;
-    Layout7: TLayout;
-    Label7: TLabel;
-    edt_Codigo_edicao: TEdit;
-    Label8: TLabel;
-    edt_nome_edicao: TEdit;
-    Label9: TLabel;
-    edt_endereco_edicao: TEdit;
-    btn_salvar_edica: TButton;
-    btnDeletar: TButton;
     edt_data: TDateEdit;
     FDQuery1: TFDQuery;
     Layout8: TLayout;
     Label10: TLabel;
     Label11: TLabel;
     Image3: TImage;
+    TabControl2: TTabControl;
+    tbCliente: TTabItem;
+    tbProdutos: TTabItem;
+    tbPgto: TTabItem;
+    Layout6: TLayout;
+    Layout7: TLayout;
+    edtDataPedido: TDateEdit;
+    Memo1: TMemo;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Layout9: TLayout;
+    edtCliente: TEdit;
+    SpeedButton2: TSpeedButton;
+    Layout10: TLayout;
+    btnAdicionarProduto: TButton;
+    Layout11: TLayout;
+    ListView2: TListView;
+    Layout12: TLayout;
+    Label6: TLabel;
+    Layout13: TLayout;
+    Label7: TLabel;
+    ComboBoxFormasPgto: TComboBox;
+    btnSalvarPedido: TButton;
+    StyleBook1: TStyleBook;
+    Label8: TLabel;
+    tbListaProdutos: TTabItem;
+    ListBox1: TListBox;
+    Button1: TButton;
+    edtPesquisaItemPedido: TEdit;
+    Layout14: TLayout;
+    SpeedButton3: TSpeedButton;
+    SpeedButton4: TSpeedButton;
+    Label9: TLabel;
+    Button2: TButton;
+    ActionList1: TActionList;
     procedure btnPesquisarClick(Sender: TObject);
     procedure atualizaPedidosBanco();
     procedure inserePedidoNaLista(pedido : TPedido);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure btnVoltarClick(Sender: TObject);
+    procedure FDConnection1BeforeConnect(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure btnInserirClienteClick(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure btnAdicionarProdutoClick(Sender: TObject);
   private
     { Private declarations }
   public
     { Public declarations }
+    idClientePedido : Integer;
+    nomeClientePedido : string;
+
   end;
 
 var
@@ -86,6 +124,9 @@ var
 implementation
 
 {$R *.fmx}
+
+uses uClientes, uProdutosFrame;
+
 
 procedure TFrm_Pedidos.atualizaPedidosBanco;
 var vPedido : TPedido;
@@ -133,11 +174,53 @@ begin
 
 end;
 
+procedure TFrm_Pedidos.btnAdicionarProdutoClick(Sender: TObject);
+begin
+
+  TabControl1.TabIndex := 2;
+
+end;
+
+procedure TFrm_Pedidos.btnInserirClienteClick(Sender: TObject);
+begin
+
+  TabControl1.TabIndex := 1;
+
+end;
+
 procedure TFrm_Pedidos.btnPesquisarClick(Sender: TObject);
 begin
 
  // Chamar metodo de listar pedidos
  atualizaPedidosBanco;
+
+end;
+
+procedure TFrm_Pedidos.btnVoltarClick(Sender: TObject);
+begin
+
+  Frm_Pedidos.Close;
+
+end;
+
+
+procedure TFrm_Pedidos.FDConnection1BeforeConnect(Sender: TObject);
+begin
+
+  //{$IFDEF MSWINDOWS}
+  //  FDConnection1.Params.Values['Database'] := System.SysUtils.GetCurrentDir + '\banco\banco-univel';
+  //{$ELSE}
+  //  FDConnection1.Params.Values['Database'] := System.IOUtils.TPath.Combine(TPath.GetDocumentsPath, 'banco-univel.db');
+  //{$ENDIF}
+
+end;
+
+procedure TFrm_Pedidos.FormShow(Sender: TObject);
+begin
+
+  TabControl1.TabIndex := 0;
+  edt_data.Date := Date;
+  edtDataPedido.Date := Date;
 
 end;
 
@@ -156,6 +239,27 @@ begin
 
   end;
 
+
+end;
+
+procedure TFrm_Pedidos.SpeedButton1Click(Sender: TObject);
+begin
+
+  TabControl1.TabIndex := 0;
+
+end;
+
+procedure TFrm_Pedidos.SpeedButton2Click(Sender: TObject);
+begin
+
+  if not Assigned(frmClientes) then
+    frmClientes := TfrmClientes.Create(self);
+
+  frmClientes.atravesPedido := true;
+
+  frmClientes.ShowModal;
+
+  edtCliente.Text := nomeClientePedido;
 
 end;
 

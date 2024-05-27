@@ -12,7 +12,7 @@ uses
   FireDAC.Phys, FireDAC.Phys.SQLite, FireDAC.Phys.SQLiteDef,
   FireDAC.Stan.ExprFuncs, FireDAC.Phys.SQLiteWrapper.Stat, FireDAC.FMXUI.Wait,
   FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt, Data.DB,
-  FireDAC.Comp.DataSet, FireDAC.Comp.Client, FMX.TabControl, FMX.Objects;
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, FMX.TabControl, FMX.Objects, IOUtils;
 
 type
   TCliente = record
@@ -79,17 +79,21 @@ type
     procedure editaClienteNoBanco(cliente : TCliente);
     procedure btn_salvar_edicaClick(Sender: TObject);
 
-    function buscarClientenoBanco(id_cliente : integer) : TCliente;
+
     procedure SpeedButton2Click(Sender: TObject);
     procedure btnVoltarClick(Sender: TObject);
-
+    function buscarClientenoBanco(id_cliente : integer) : TCliente;
     procedure deletaCliente(id_cliente : integer);
     procedure btnDeletarClick(Sender: TObject);
+    procedure FDConnection1BeforeCommit(Sender: TObject);
 
   private
     { Private declarations }
   public
     { Public declarations }
+
+    atravesPedido : Boolean;
+
   end;
 
 var
@@ -98,6 +102,8 @@ var
 implementation
 
 {$R *.fmx}
+
+uses uPedidos;
 
 procedure TfrmClientes.atualizaClientesdoBanco;
 var vCliente : TCliente;
@@ -273,6 +279,15 @@ begin
 
 end;
 
+procedure TfrmClientes.FDConnection1BeforeCommit(Sender: TObject);
+begin
+  {$IFDEF MSWINDOWS}
+    FDConnection1.Params.Values['Database'] := System.SysUtils.GetCurrentDir + '\banco\banco-univel.db';
+  {$ELSE}
+    FDConnection1.Params.Values['Database'] := System.IOUtils.TPath.Combine(TPath.GetDocumentsPath, 'banco-univel.db');
+  {$ENDIF}
+end;
+
 procedure TfrmClientes.FormShow(Sender: TObject);
 begin
 
@@ -333,21 +348,30 @@ begin
 
 //pegar o indice do listview
 
-
-  if (ItemObject.Name = 'imgEditar') then
+  if atravesPedido then
   begin
-    id_cliente := StrToInt(TListItemText(ListView1.Items[ItemIndex].Objects.FindDrawable('txtCodigo')).Text);
 
-    vCLiente := buscarClientenoBanco(id_cliente);
+    Frm_Pedidos.idClientePedido := StrToInt(TListItemText(ListView1.Items[ItemIndex].Objects.FindDrawable('txtCodigo')).Text);
+    Frm_Pedidos.nomeClientePedido := TListItemText(ListView1.Items[ItemIndex].Objects.FindDrawable('txtNome')).Text;
 
-    edt_Codigo_edicao.Text := IntToStr(vCLiente.codigo);
-    edt_nome_edicao.Text := vCLiente.nome;
-    edt_endereco_edicao.Text := vCLiente.endereco;
+    Close;
 
-    TabControl1.TabIndex := 2;
+  end
+  else
+  begin
+    if (ItemObject.Name = 'imgEditar') then
+    begin
+      id_cliente := StrToInt(TListItemText(ListView1.Items[ItemIndex].Objects.FindDrawable('txtCodigo')).Text);
+
+      vCLiente := buscarClientenoBanco(id_cliente);
+
+      edt_Codigo_edicao.Text := IntToStr(vCLiente.codigo);
+      edt_nome_edicao.Text := vCLiente.nome;
+      edt_endereco_edicao.Text := vCLiente.endereco;
+
+      TabControl1.TabIndex := 2;
+    end;
   end;
-
-
 
 end;
 

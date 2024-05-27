@@ -1,0 +1,63 @@
+object FrmListaProdutos: TFrmListaProdutos
+  Size.Width = 252.000000000000000000
+  Size.Height = 68.000000000000000000
+  Size.PlatformDefault = False
+  object edtQtde: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 0
+    Text = '0'
+    TextSettings.HorzAlign = Center
+    Position.X = 111.000000000000000000
+    Position.Y = 38.000000000000000000
+    Size.Width = 42.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object SpeedButton1: TSpeedButton
+    Position.X = 64.000000000000000000
+    Position.Y = 40.000000000000000000
+    Size.Width = 39.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    StyleLookup = 'deleteitembutton'
+    Text = 'SpeedButton1'
+    OnClick = SpeedButton1Click
+  end
+  object SpeedButton2: TSpeedButton
+    Position.X = 161.000000000000000000
+    Position.Y = 38.000000000000000000
+    Size.Width = 33.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    StyleLookup = 'additembutton'
+    Text = 'SpeedButton2'
+    OnClick = SpeedButton2Click
+  end
+  object lblNome: TLabel
+    Position.X = 81.000000000000000000
+    Position.Y = 8.000000000000000000
+    Size.Width = 72.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Coca-Cola'
+    TabOrder = 2
+  end
+  object lblCodigo: TLabel
+    Position.X = 8.000000000000000000
+    Position.Y = 8.000000000000000000
+    Size.Width = 41.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    Text = '15'
+    TabOrder = 1
+  end
+  object lblValor: TLabel
+    Position.X = 181.000000000000000000
+    Position.Y = 8.000000000000000000
+    Size.Width = 72.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'R$ 150.00'
+    TabOrder = 4
+  end
+end

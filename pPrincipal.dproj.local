@@ -8,8 +8,18 @@
     <Transaction>2024/03/12 19:47:35.000.402,=C:\Users\Matheus\Documents\Embarcadero\Studio\Projects\Univel_Aplicativo\Unit1.pas</Transaction>
     <Transaction>2024/03/12 19:49:18.000.372,C:\Users\Matheus\Documents\Embarcadero\Studio\Projects\Univel_Aplicativo\Unit1.fmx=C:\Users\Matheus\Documents\Embarcadero\Studio\Projects\Univel_Aplicativo\uClientes.fmx</Transaction>
     <Transaction>2024/03/12 19:49:18.000.372,C:\Users\Matheus\Documents\Embarcadero\Studio\Projects\Univel_Aplicativo\Unit1.pas=C:\Users\Matheus\Documents\Embarcadero\Studio\Projects\Univel_Aplicativo\uClientes.pas</Transaction>
-    <Transaction>2024/05/06 21:23:19.585,=C:\Users\Matheus\Documents\GitHub\Projeto Forca de vendas (delphi)\P_Forca_de_Vendas\Unit1.pas</Transaction>
-    <Transaction>2024/05/06 21:24:56.498,C:\Users\Matheus\Documents\GitHub\Projeto Forca de vendas (delphi)\P_Forca_de_Vendas\uPedidos.fmx=C:\Users\Matheus\Documents\GitHub\Projeto Forca de vendas (delphi)\P_Forca_de_Vendas\Unit1.fmx</Transaction>
-    <Transaction>2024/05/06 21:24:56.498,C:\Users\Matheus\Documents\GitHub\Projeto Forca de vendas (delphi)\P_Forca_de_Vendas\uPedidos.pas=C:\Users\Matheus\Documents\GitHub\Projeto Forca de vendas (delphi)\P_Forca_de_Vendas\Unit1.pas</Transaction>
+    <Transaction>2024/05/06 21:23:19.000.585,=C:\Users\Matheus\Documents\GitHub\Projeto Forca de vendas (delphi)\P_Forca_de_Vendas\Unit1.pas</Transaction>
+    <Transaction>2024/05/06 21:24:56.000.498,C:\Users\Matheus\Documents\GitHub\Projeto Forca de vendas (delphi)\P_Forca_de_Vendas\uPedidos.pas=C:\Users\Matheus\Documents\GitHub\Projeto Forca de vendas (delphi)\P_Forca_de_Vendas\Unit1.pas</Transaction>
+    <Transaction>2024/05/06 21:24:56.000.498,C:\Users\Matheus\Documents\GitHub\Projeto Forca de vendas (delphi)\P_Forca_de_Vendas\uPedidos.fmx=C:\Users\Matheus\Documents\GitHub\Projeto Forca de vendas (delphi)\P_Forca_de_Vendas\Unit1.fmx</Transaction>
+    <Transaction>2024/05/14 16:02:36.000.842,=C:\Users\Matheus\Documents\GitHub\Projeto Forca de vendas (delphi)\P_Forca_de_Vendas - Copia\Unit1.pas</Transaction>
+    <Transaction>2024/05/14 16:04:23.000.080,C:\Users\Matheus\Documents\GitHub\Projeto Forca de vendas (delphi)\P_Forca_de_Vendas - Copia\Unit1.pas=C:\Users\Matheus\Documents\GitHub\Projeto Forca de vendas (delphi)\P_Forca_de_Vendas - Copia\uDM.pas</Transaction>
+    <Transaction>2024/05/14 16:04:23.000.080,C:\Users\Matheus\Documents\GitHub\Projeto Forca de vendas (delphi)\P_Forca_de_Vendas - Copia\Unit1.dfm=C:\Users\Matheus\Documents\GitHub\Projeto Forca de vendas (delphi)\P_Forca_de_Vendas - Copia\uDM.dfm</Transaction>
+    <Transaction>2024/05/20 11:41:46.000.498,=C:\Users\Matheus\Documents\GitHub\Projeto Forca de vendas (delphi)\P_Forca_de_Vendas - Copia\Unit1.pas</Transaction>
+    <Transaction>2024/05/20 11:42:20.000.981,=C:\Users\Matheus\Documents\GitHub\Projeto Forca de vendas (delphi)\P_Forca_de_Vendas - Copia\Unit1.pas</Transaction>
+    <Transaction>2024/05/20 11:45:51.000.957,C:\Users\Matheus\Documents\GitHub\Projeto Forca de vendas (delphi)\P_Forca_de_Vendas - Copia\Unit1.fmx=C:\Users\Matheus\Documents\GitHub\Projeto Forca de vendas (delphi)\P_Forca_de_Vendas - Copia\uProdutosFrame.fmx</Transaction>
+    <Transaction>2024/05/20 11:45:51.000.957,C:\Users\Matheus\Documents\GitHub\Projeto Forca de vendas (delphi)\P_Forca_de_Vendas - Copia\Unit1.pas=C:\Users\Matheus\Documents\GitHub\Projeto Forca de vendas (delphi)\P_Forca_de_Vendas - Copia\uProdutosFrame.pas</Transaction>
   </Transactions>
+	<ActiveMobileDevice>
+		<NoProfile Android="" Android64=""/>
+	</ActiveMobileDevice>
 </BorlandProject>
