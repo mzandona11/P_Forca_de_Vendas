@@ -33,6 +33,7 @@ procedure TFrmListaProdutos.SpeedButton1Click(Sender: TObject);
 var qtde : Float64;
   I : Integer;
   inserindoItem : Boolean;
+  produto : TProduto;
 begin
 
   qtde := StrToFloat(edtQtde.Text);
@@ -44,6 +45,13 @@ begin
 
   edtQtde.Text := qtde.ToString;
 
+  produto.codigo := StrToInt(lblCodigo.Text);
+  produto.nome := lblNome.Text;
+  produto.valorUnit := StrToFloat(lblValor.Text);
+  produto.qtde :=  qtde;
+
+
+  Frm_Pedidos.inserirProdutonoVetor(produto);
 
 end;
 
@@ -51,6 +59,7 @@ procedure TFrmListaProdutos.SpeedButton2Click(Sender: TObject);
 var qtde : Float64;
   I: Integer;
   inserindoItem : Boolean;
+  produto : TProduto;
 begin
 
   qtde := StrToFloat(edtQtde.Text);
@@ -61,6 +70,13 @@ begin
 
   inserindoItem := true;
 
+  produto.codigo := StrToInt(lblCodigo.Text);
+  produto.nome := lblNome.Text;
+  produto.valorUnit := StrToFloat(lblValor.Text);
+  produto.qtde :=  qtde;
+
+
+  Frm_Pedidos.inserirProdutonoVetor(produto);
 
 end;
 

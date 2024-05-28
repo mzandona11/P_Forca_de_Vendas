@@ -25,7 +25,7 @@ type
   TProduto = record
     codigo  : Integer;
     nome : string;
-    valorUnit,qtde : Float32;
+    valorUnit, qtde, vTotal : Float32;
   end;
 
   TPedido = record
@@ -80,7 +80,7 @@ type
     Layout10: TLayout;
     btnAdicionarProduto: TButton;
     Layout11: TLayout;
-    ListView2: TListView;
+    lvProdutosPedido: TListView;
     Layout12: TLayout;
     Label6: TLabel;
     Layout13: TLayout;
@@ -109,12 +109,26 @@ type
     procedure btnInserirClienteClick(Sender: TObject);
     procedure SpeedButton2Click(Sender: TObject);
     procedure btnAdicionarProdutoClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure inserirProdutonoVetor(produto: TProduto);
+    procedure Button2Click(Sender: TObject);
+    procedure btnSalvarPedidoClick(Sender: TObject);
+
   private
+    procedure atualizarListBox;
+    procedure inserirItemListBox(id_produto, estoque: integer;
+      nome_produto: string; valor: double);
+    procedure consultarProdutosBanco;
+    procedure inserirProdutosnoPedido(id_produto: integer; nome: string; qtde,
+      valorunit: double);
+    procedure inserePedidonoBanco;
     { Private declarations }
   public
     { Public declarations }
     idClientePedido : Integer;
     nomeClientePedido : string;
+
+    vProdutosPedido : Array of TProduto;
 
   end;
 
@@ -196,10 +210,132 @@ begin
 
 end;
 
+procedure TFrm_Pedidos.btnSalvarPedidoClick(Sender: TObject);
+begin
+
+  inserePedidonoBanco;
+
+end;
+
 procedure TFrm_Pedidos.btnVoltarClick(Sender: TObject);
 begin
 
   Frm_Pedidos.Close;
+
+end;
+
+
+procedure TFrm_Pedidos.inserirItemListBox(id_produto,estoque : integer; nome_produto:string; valor:double);
+var item : TListBoxItem;
+    form : TFrmListaProdutos;
+begin
+
+  item := TListBoxItem.Create(ListBox1);
+  item.Height := 68;
+  item.Tag := id_produto;
+
+  form := TFrmListaProdutos.Create(item);
+  form.Align := TAlignLayout.Client;
+  form.lblNome.Text := nome_produto;
+  form.lblCodigo.Text := IntToStr(id_produto);
+  form.lblValor.Text := FloatToStr(valor);
+
+  item.AddObject(form);
+
+  ListBox1.AddObject(item);
+
+end;
+
+procedure TFrm_Pedidos.consultarProdutosBanco();
+begin
+
+  FDQuery1.Close;
+  FDQuery1.SQL.Clear;
+  FDQuery1.SQL.Add('select * from produtos');
+  FDQuery1.Open();
+
+end;
+
+procedure TFrm_Pedidos.atualizarListBox();
+begin
+
+  //Montar a consulta no banco
+  consultarProdutosBanco();
+
+  while not FDQuery1.Eof do
+  begin
+    inserirItemListBox(FDQuery1.FieldByName('id').AsInteger,
+                      FDQuery1.FieldByName('estoque').AsInteger,
+                      FDQuery1.FieldByName('descricao').AsString,
+                      FDQuery1.FieldByName('valor').AsFloat);
+
+    FDQuery1.Next;
+  end;
+end;
+
+
+procedure TFrm_Pedidos.Button1Click(Sender: TObject);
+begin
+
+  //Chamar o nosso metodo de consulta dos produtos, atualizando nossa lista
+
+  atualizarListBox();
+
+
+end;
+
+procedure TFrm_Pedidos.inserePedidonoBanco();
+begin
+
+  FDQuery1.Close;
+  FDQuery1.SQL.Clear;
+  FDQuery1.SQL.Add('insert into pedido (id, data, id_cliente, valor_total, id_formapgto)');
+  FDQuery1.SQL.Add('             values (:id, :data, :id_cliente, :valor_total, :id_formapgto)');
+
+  FDQuery1.ParamByName('id').AsInteger := 20;
+  FDQuery1.ParamByName('data').AsDate := edtDataPedido.Date;
+  FDQuery1.ParamByName('id_cliente').AsInteger := idClientePedido;
+  FDQuery1.ParamByName('valor_total').AsFloat := 151;
+  FDQuery1.ParamByName('id_formapgto').AsFloat := 1;
+
+  FDQuery1.ExecSQL;
+
+end;
+
+procedure TFrm_Pedidos.Button2Click(Sender: TObject);
+var i : Integer;
+begin
+
+  i := 0;
+
+  lvProdutosPedido.Items.Clear;
+
+  while i < Length(vProdutosPedido) do
+  begin
+
+    inserirProdutosnoPedido(vProdutosPedido[i].codigo, vProdutosPedido[i].nome,
+                            vProdutosPedido[i].qtde , vProdutosPedido[i].valorUnit);
+
+    inc(i);
+  end;
+
+  TabControl1.TabIndex := 1;
+
+end;
+
+procedure TFrm_Pedidos.inserirProdutosnoPedido(id_produto: integer; nome : string; qtde, valorunit : double);
+begin
+
+  if qtde > 0 then
+    with lvProdutosPedido.Items.Add do
+    begin
+
+      TListItemText(Objects.FindDrawable('txtCodigo')).Text := IntToStr(id_produto);
+      TListItemText(Objects.FindDrawable('txtNome')).Text := nome;
+      TListItemText(Objects.FindDrawable('txtValorUnit')).Text := FloatToStr(valorunit);
+      TListItemText(Objects.FindDrawable('txtQtde')).Text := FloatToStr(qtde);
+
+    end;
 
 end;
 
@@ -214,6 +350,60 @@ begin
   //{$ENDIF}
 
 end;
+
+procedure TFrm_Pedidos.inserirProdutonoVetor(produto : TProduto);
+var i : integer;
+    achou : boolean;
+begin
+
+  i := 0;
+  achou := false;
+
+  if Length(vProdutosPedido) = 0 then
+  begin
+    //inserir o produto no vetor
+    SetLength(vProdutosPedido, Length(vProdutosPedido) + 1);
+
+    vProdutosPedido[Length(vProdutosPedido) - 1].codigo := produto.codigo;
+    vProdutosPedido[Length(vProdutosPedido) - 1].nome := produto.nome;
+    vProdutosPedido[Length(vProdutosPedido) - 1].qtde := produto.qtde;
+    vProdutosPedido[Length(vProdutosPedido) - 1].valorUnit := produto.valorUnit;
+    vProdutosPedido[Length(vProdutosPedido) - 1].vTotal := produto.qtde * produto.valorUnit;
+  end
+  else
+  begin
+
+    while i < Length(vProdutosPedido) do
+    begin
+
+      if vProdutosPedido[i].codigo = produto.codigo then
+      begin
+        vProdutosPedido[i].codigo := produto.codigo;
+        vProdutosPedido[i].nome := produto.nome;
+        vProdutosPedido[i].qtde := produto.qtde;
+        vProdutosPedido[i].valorUnit := produto.valorUnit;
+        vProdutosPedido[i].vTotal := produto.qtde * produto.valorUnit;
+        achou := true;
+      end;
+
+      inc(i);
+    end;
+
+    if not achou then
+    begin
+      SetLength(vProdutosPedido, Length(vProdutosPedido) + 1);
+
+      vProdutosPedido[Length(vProdutosPedido) - 1].codigo := produto.codigo;
+      vProdutosPedido[Length(vProdutosPedido) - 1].nome := produto.nome;
+      vProdutosPedido[Length(vProdutosPedido) - 1].qtde := produto.qtde;
+      vProdutosPedido[Length(vProdutosPedido) - 1].valorUnit := produto.valorUnit;
+      vProdutosPedido[Length(vProdutosPedido) - 1].vTotal := produto.qtde * produto.valorUnit;
+    end;
+
+  end;
+
+end;
+
 
 procedure TFrm_Pedidos.FormShow(Sender: TObject);
 begin

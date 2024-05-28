@@ -30,6 +30,9 @@ object frm_Principal: Tfrm_Principal
   object btnPedidos: TButton
     Position.X = 40.000000000000000000
     Position.Y = 304.000000000000000000
+    Size.Width = 73.000000000000000000
+    Size.Height = 57.000000000000000000
+    Size.PlatformDefault = False
     TabOrder = 4
     Text = 'Pedidos'
     OnClick = btnPedidosClick
